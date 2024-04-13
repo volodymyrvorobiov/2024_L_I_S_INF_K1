@@ -8,12 +8,14 @@ class FlaskrTestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.app = app.test_client()
 
+
     def test_outputs(self):
         rv = self.app.get('/outputs')
         s = str(rv.data)
-        ','.join(SUPPORTED) in s
+        self.assertTrue(','.join(SUPPORTED) in s)
+        
 
     def test_msg_with_output(self):
         rv = self.app.get('/?output=json')
-        expected_response = b'{"imie":"Volodymyr", "msg":"Hello World!"}'
-        self.assertEqual(expected_response, rv.data)
+        self.assertEqual(200, rv.status_code)
+        self.assertEqual(b'{ "imie":"Volodymyr", "mgs":Hello World!"}', rv.data)
